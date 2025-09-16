@@ -5,113 +5,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MP3 文件夹音乐播放器</title>
     <style>
+        /* 全局样式 */
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
         }
+
         h1 {
             text-align: center;
+            padding: 20px;
+            background-color: #343a40;
+            color: #fff;
+            margin: 0;
         }
-        .music-list {
+
+        .container {
+            max-width: 800px;
             margin: 20px auto;
-            max-width: 600px;
+            padding: 20px;
             background: #ffffff;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        .music-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
         .music-item {
-            margin: 10px 0;
-            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
             border-bottom: 1px solid #ddd;
+            transition: background-color 0.2s ease;
         }
+
+        .music-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .music-title {
+            flex: 1;
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .play-button {
+            margin-left: 10px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .play-button:hover {
+            background-color: #0056b3;
+        }
+
         audio {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
+            outline: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <h1>MP3 文件夹音乐播放器</h1>
-    <div class="music-list" id="music-list">
-        <h2>音乐列表</h2>
-        <p>加载中...</p>
+    <div class="container">
+        <ul class="music-list" id="music-list">
+            <li>加载中...</li>
+        </ul>
+
+        <audio id="audio-player" controls style="display: none;"></audio>
+    </div>
+
+    <div class="footer">
+        © 2023 音乐播放器 - 由 HTML + JS 构建
     </div>
 
     <script>
-        // 手动列出 MP3 文件的完整 URL
+        // MP3 文件夹路径
+        const musicFolder = 'https://github.com/JinAkanishi1987/English/tree/main/music';
+
+        // 手动定义文件列表（如果文件过多，建议通过后端 API 动态获取）
         const musicFiles = [
-            'https://jinakanishi1987.github.io/English/music/01 Starter.mp3',
-            'https://jinakanishi1987.github.io/English/music/02 Unit 1-Small task.mp3',
-            'https://jinakanishi1987.github.io/English/music/03 Unit 1-Topic words.mp33'
+            'song1.mp3',
+            'song2.mp3',
+            'song3.mp3',
+            'song4.mp3',
+            'song5.mp3',
+            'song6.mp3'
         ];
 
+        // 获取 HTML 元素
         const musicList = document.getElementById('music-list');
-        musicList.innerHTML = ''; // 清空加载提示
+        const audioPlayer = document.getElementById('audio-player');
 
-        // 遍历 MP3 文件并生成播放器
-        musicFiles.forEach(fileUrl => {
-            const musicItem = document.createElement('div');
-            musicItem.classList.add('music-item');
+        // 清空默认内容
+        musicList.innerHTML = '';
+
+        // 遍历 MP3 文件，动态生成列表
+        musicFiles.forEach((file, index) => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('music-item');
 
             // 显示文件名
-            const fileName = document.createElement('p');
-            fileName.textContent = fileUrl.split('/').pop(); // 提取文件名
+            const title = document.createElement('p');
+            title.classList.add('music-title');
+            title.textContent = `${index + 1}. ${file.split('/').pop()}`; // 显示文件名
 
-            // 创建音频播放器
-            const audioPlayer = document.createElement('audio');
-            audioPlayer.controls = true;
-            audioPlayer.src = fileUrl;
+            // 播放按钮
+            const playButton = document.createElement('button');
+            playButton.classList.add('play-button');
+            playButton.textContent = '播放';
+            playButton.addEventListener('click', () => {
+                audioPlayer.src = musicFolder + file;
+                audioPlayer.style.display = 'block';
+                audioPlayer.play();
+            });
 
-            // 添加到音乐项
-            musicItem.appendChild(fileName);
-            musicItem.appendChild(audioPlayer);
+            // 添加到列表项
+            listItem.appendChild(title);
+            listItem.appendChild(playButton);
 
             // 添加到音乐列表
-            musicList.appendChild(musicItem);
+            musicList.appendChild(listItem);
         });
     </script>
 </body>
 </html>
-说明
-1.
-GitHub 原始文件 URL
-•
-GitHub 提供了 raw.githubusercontent.com 作为文件的原始 URL。
-•
-例如：
-html
-https://raw.githubusercontent.com/<username>/<repository>/<branch>/<path-to-file>
-•
-在你的例子中，MP3 文件的 URL 是：
-html
-https://raw.githubusercontent.com/JinAkanishi1987/English/main/music/song1.mp3
-2.
-手动配置文件列表
-•
-由于无法自动获取文件夹中的文件列表，你需要手动列出所有文件的完整 URL。
-3.
-GitHub Pages
-•
-如果你不想使用 raw.githubusercontent.com，可以将文件托管到 GitHub Pages，并使用更简洁的 URL。
-3. 使用后端服务动态获取文件列表
-如果你有后端服务（如 Node.js、PHP 等），可以通过后端读取文件夹内容并将文件列表返回给前端。以下是一个简单的思路：
-1.
-后端返回文件列表（例如 JSON 格式）：
-json
-["song1.mp3", "song2.mp3", "song3.mp3"]
-2.
-前端从后端获取文件列表并动态生成播放器：
-javascript
-fetch('https://your-backend-url/api/files')
-    .then(response => response.json())
-    .then(files => {
-        files.forEach(file => {
-            // 动态生成播放器
-        });
-    });
-这种方式更灵活，但需要服务器支持。
-希望以上解决方案能帮助你成功实现播放指定文件夹内的 MP3 文件！
-Copied
-
