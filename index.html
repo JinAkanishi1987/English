@@ -1,9 +1,37 @@
+MP3音乐库的HTML示例代码
+文件路径https://github.com/JinAkanishi1987/English/tree/main/music在这 没有刷新列表
+在纯前端环境中，HTML 和 JavaScript 无法直接从 GitHub 文件夹（如 https://github.com/.../tree/main/music）获取文件列表，因为 GitHub 提供的文件夹路径并不是一个普通的文件系统路径，而是一个动态生成的页面。
+如果你想动态获取 https://github.com/JinAkanishi1987/English/tree/main/music 文件夹中的 MP3 文件列表，前端 HTML/JavaScript 是无法直接实现的，因为 GitHub 的文件夹页面不是直接返回文件列表的 API，而是一个 HTML 页面。
+可行的解决方案
+1. 将 MP3 文件托管到 GitHub Pages 或其他静态文件服务器
+GitHub 提供了 GitHub Pages，可以直接托管静态文件（如 HTML、CSS、JavaScript 和 MP3 文件）。一旦托管完成，你可以通过 HTTP URL 直接访问这些文件，而不是通过 GitHub 的文件夹页面。
+步骤：
+1.
+将 MP3 文件放在项目的 music/ 文件夹中。
+2.
+在 GitHub 仓库中启用 GitHub Pages：
+•
+打开你的仓库。
+•
+点击 Settings -> Pages。
+•
+在 Source 中选择分支（例如 main），并保存。
+3.
+GitHub 会生成一个托管 URL，例如 https://<username>.github.io/<repository>/music/song1.mp3。
+4.
+更新你的 HTML 文件，将 musicFolder 设置为托管的 URL，例如：
+javascript
+const musicFolder = 'https://<username>.github.io/<repository>/music/';
+2. 手动列出文件 URL
+由于 GitHub 不提供直接获取文件夹内容的 API，你可以手动列出所有文件的完整 URL，并将它们添加到 HTML 文件中。
+更新你的代码如下：
+html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上南二村小学</title>
+    <title>MP3 文件夹音乐播放器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,39 +61,36 @@
     </style>
 </head>
 <body>
-    <h1>一年级上册</h1>
+    <h1>MP3 文件夹音乐播放器</h1>
     <div class="music-list" id="music-list">
         <h2>音乐列表</h2>
         <p>加载中...</p>
     </div>
 
     <script>
-        // 指定 MP3 文件夹路径
-        const musicFolder = 'https://github.com/JinAkanishi1987/English/tree/main/music';
-
-        // 手动定义文件列表（如果没有后端支持）
+        // 手动列出 MP3 文件的完整 URL
         const musicFiles = [
-            'song1.mp3',
-            'song2.mp3',
-            'song3.mp3'
+            'https://jinakanishi1987.github.io/English/music/01 Starter.mp3',
+            'https://jinakanishi1987.github.io/English/music/02 Unit 1-Small task.mp3',
+            'https://jinakanishi1987.github.io/English/music/03 Unit 1-Topic words.mp33'
         ];
 
         const musicList = document.getElementById('music-list');
         musicList.innerHTML = ''; // 清空加载提示
 
         // 遍历 MP3 文件并生成播放器
-        musicFiles.forEach(file => {
+        musicFiles.forEach(fileUrl => {
             const musicItem = document.createElement('div');
             musicItem.classList.add('music-item');
 
             // 显示文件名
             const fileName = document.createElement('p');
-            fileName.textContent = file;
+            fileName.textContent = fileUrl.split('/').pop(); // 提取文件名
 
             // 创建音频播放器
             const audioPlayer = document.createElement('audio');
             audioPlayer.controls = true;
-            audioPlayer.src = musicFolder + file;
+            audioPlayer.src = fileUrl;
 
             // 添加到音乐项
             musicItem.appendChild(fileName);
@@ -77,6 +102,43 @@
     </script>
 </body>
 </html>
-
-
-
+说明
+1.
+GitHub 原始文件 URL
+•
+GitHub 提供了 raw.githubusercontent.com 作为文件的原始 URL。
+•
+例如：
+html
+https://raw.githubusercontent.com/<username>/<repository>/<branch>/<path-to-file>
+•
+在你的例子中，MP3 文件的 URL 是：
+html
+https://raw.githubusercontent.com/JinAkanishi1987/English/main/music/song1.mp3
+2.
+手动配置文件列表
+•
+由于无法自动获取文件夹中的文件列表，你需要手动列出所有文件的完整 URL。
+3.
+GitHub Pages
+•
+如果你不想使用 raw.githubusercontent.com，可以将文件托管到 GitHub Pages，并使用更简洁的 URL。
+3. 使用后端服务动态获取文件列表
+如果你有后端服务（如 Node.js、PHP 等），可以通过后端读取文件夹内容并将文件列表返回给前端。以下是一个简单的思路：
+1.
+后端返回文件列表（例如 JSON 格式）：
+json
+["song1.mp3", "song2.mp3", "song3.mp3"]
+2.
+前端从后端获取文件列表并动态生成播放器：
+javascript
+fetch('https://your-backend-url/api/files')
+    .then(response => response.json())
+    .then(files => {
+        files.forEach(file => {
+            // 动态生成播放器
+        });
+    });
+这种方式更灵活，但需要服务器支持。
+希望以上解决方案能帮助你成功实现播放指定文件夹内的 MP3 文件！
+Copied
