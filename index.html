@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP3 音乐库</title>
+    <title>MP3 文件夹音乐播放器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,10 +11,6 @@
             background-color: #f4f4f9;
         }
         h1 {
-            text-align: center;
-        }
-        .upload-area {
-            margin: 20px auto;
             text-align: center;
         }
         .music-list {
@@ -37,65 +33,46 @@
     </style>
 </head>
 <body>
-    <h1>MP3 音乐库</h1>
-
-    <div class="upload-area">
-        <label for="file-upload">上传 MP3 文件：</label>
-        <input type="file" id="file-upload" accept="audio/mpeg">
-        <p style="color: #888;">（仅支持 MP3 文件）</p>
-    </div>
-
+    <h1>MP3 文件夹音乐播放器</h1>
     <div class="music-list" id="music-list">
         <h2>音乐列表</h2>
-        <p>当前没有音乐，请上传 MP3 文件。</p>
+        <p>加载中...</p>
     </div>
 
     <script>
-        const fileUpload = document.getElementById('file-upload');
+        // 指定 MP3 文件夹路径
+        const musicFolder = './music/';
+
+        // 手动定义文件列表（如果没有后端支持）
+        const musicFiles = [
+            'song1.mp3',
+            'song2.mp3',
+            'song3.mp3'
+        ];
+
         const musicList = document.getElementById('music-list');
+        musicList.innerHTML = ''; // 清空加载提示
 
-        fileUpload.addEventListener('change', function(event) {
-            const files = event.target.files;
+        // 遍历 MP3 文件并生成播放器
+        musicFiles.forEach(file => {
+            const musicItem = document.createElement('div');
+            musicItem.classList.add('music-item');
 
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
+            // 显示文件名
+            const fileName = document.createElement('p');
+            fileName.textContent = file;
 
-                // 检查文件类型是否为 MP3
-                if (file.type === 'audio/mpeg') {
-                    const reader = new FileReader();
+            // 创建音频播放器
+            const audioPlayer = document.createElement('audio');
+            audioPlayer.controls = true;
+            audioPlayer.src = musicFolder + file;
 
-                    reader.onload = function(e) {
-                        const audioUrl = e.target.result;
+            // 添加到音乐项
+            musicItem.appendChild(fileName);
+            musicItem.appendChild(audioPlayer);
 
-                        // 创建音乐项
-                        const musicItem = document.createElement('div');
-                        musicItem.classList.add('music-item');
-
-                        // 显示文件名
-                        const fileName = document.createElement('p');
-                        fileName.textContent = file.name;
-
-                        // 创建音频播放器
-                        const audioPlayer = document.createElement('audio');
-                        audioPlayer.controls = true;
-                        audioPlayer.src = audioUrl;
-
-                        // 添加到音乐项
-                        musicItem.appendChild(fileName);
-                        musicItem.appendChild(audioPlayer);
-
-                        // 添加到音乐列表
-                        musicList.appendChild(musicItem);
-                    };
-
-                    reader.readAsDataURL(file);
-                } else {
-                    alert('仅支持 MP3 文件！');
-                }
-            }
-
-            // 清空上传框
-            fileUpload.value = '';
+            // 添加到音乐列表
+            musicList.appendChild(musicItem);
         });
     </script>
 </body>
