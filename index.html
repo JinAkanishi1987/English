@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一年级上册</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-weight: 700;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .upload-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            background-color: #f8f9fa;
+        }
+        
+        .player-section {
+            flex: 2;
+            min-width: 400px;
+            padding: 25px;
+            border-left: 1px solid #eee;
+        }
+        
+        .upload-area {
+            border: 3px dashed #6a11cb;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            background-color: rgba(106, 17, 203, 0.05);
+        }
+        
+        .upload-area:hover {
+            background-color: rgba(106, 17, 203, 0.1);
+        }
+        
+        .upload-area i {
+            font-size: 50px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .upload-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #6a11cb;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .upload-btn:hover {
+            background: #2575fc;
+            transform: translateY(-2px);
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 25px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        
+        .file-item:hover {
+            background-color: #e9ecef;
+        }
+        
+        .file-item.active {
+            background-color: #6a11cb;
+            color: white;
+        }
+        
+        .file-icon {
+            font-size: 24px;
+            color: #6a11cb;
+            margin-right: 15px;
+        }
+        
+        .file-item.active .file-icon {
+            color: white;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        
+        .file-size {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .file-item.active .file-size {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .file-action-btn {
+            background: transparent;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .file-item.active .file-action-btn {
+            color: white;
+        }
+        
+        .file-action-btn:hover {
+            color: #6a11cb;
+        }
+        
+        .file-item.active .file-action-btn:hover {
+            color: #ffcc00;
+        }
+        
+        .album-art {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .song-details {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .current-song-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .current-song-artist {
+            font-size: 18px;
+            color: #6c757d;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s ease;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #6a11cb;
+            color: white;
+            border: none;
+            margin: 0 15px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: #2575fc;
+            transform: scale(1.05);
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 20px;
+        }
+        
+        .volume-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .volume-container i {
+            margin-right: 10px;
+            color: #6c757d;
+        }
+        
+        .volume-slider {
+            width: 70%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #e9ecef;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6a11cb;
+            cursor: pointer;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .player-section {
+                border-left: none;
+                border-top: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>上南二村小学一年级英语</h1>
+            <p class="subtitle">一年级上册</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="upload-section">
+                <div class="upload-area" id="dropArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p class="upload-text">拖放MP3文件到此处或点击上传</p>
+                    <label for="fileInput" class="upload-btn">选择文件</label>
+                    <input type="file" id="fileInput" accept=".mp3" multiple>
+                </div>
+                
+                <h3>已上传文件</h3>
+                <div class="file-list" id="fileList">
+                    <!-- 文件列表将在这里动态生成 -->
+                    <div class="file-item">
+                        <i class="fas fa-music file-icon"></i>
+                        <div class="file-info">
+                            <div class="file-name">示例音乐.mp3</div>
+                            <div class="file-size">3.2 MB</div>
+                        </div>
+                        <div class="file-actions">
+                            <button class="file-action-btn"><i class="fas fa-play"></i></button>
+                            <button class="file-action-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="player-section">
+                <div class="album-art">
+                    <i class="fas fa-music"></i>
+                </div>
+                
+                <div class="song-details">
+                    <div class="current-song-title">选择一首歌曲</div>
+                    <div class="current-song-artist">上传MP3文件开始播放</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress"></div>
+                </div>
+                
+                <div class="time-display">
+                    <span class="current-time">0:00</span>
+                    <span class="duration">0:00</span>
+                </div>
+                
+                <div class="controls">
+                    <button class="control-btn"><i class="fas fa-step-backward"></i></button>
+                    <button class="control-btn play-btn"><i class="fas fa-play"></i></button>
+                    <button class="control-btn"><i class="fas fa-step-forward"></i></button>
+                </div>
+                
+                <div class="volume-container">
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 内部使用勿外传</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const playBtn = document.querySelector('.play-btn');
+            const progressContainer = document.querySelector('.progress-container');
+            const progress = document.querySelector('.progress');
+            const currentTimeEl = document.querySelector('.current-time');
+            const durationEl = document.querySelector('.duration');
+            const volumeSlider = document.querySelector('.volume-slider');
+            const currentSongTitle = document.querySelector('.current-song-title');
+            const currentSongArtist = document.querySelector('.current-song-artist');
+            const prevBtn = document.querySelector('.fa-step-backward').parentElement;
+            const nextBtn = document.querySelector('.fa-step-forward').parentElement;
+            
+            // 创建音频元素
+            const audio = new Audio();
+            audio.volume = 0.7;
+            
+            // 存储上传的文件
+            let uploadedFiles = [];
+            let currentFileIndex = -1;
+            let isPlaying = false;
+            
+            // 初始化播放器
+            function initPlayer() {
+                // 事件监听器
+                playBtn.addEventListener('click', togglePlay);
+                prevBtn.addEventListener('click', playPrev);
+                nextBtn.addEventListener('click', playNext);
+                volumeSlider.addEventListener('input', setVolume);
+                progressContainer.addEventListener('click', setProgress);
+                audio.addEventListener('timeupdate', updateProgress);
+                audio.addEventListener('ended', playNext);
+                
+                // 文件上传事件
+                fileInput.addEventListener('change', handleFileSelect);
+                
+                // 拖放事件
+                dropArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    dropArea.style.backgroundColor = 'rgba(106, 17, 203, 0.2)';
+                });
+                
+                dropArea.addEventListener('dragleave', function() {
+                    dropArea.style.backgroundColor = 'rgba(106, 17, 203, 0.05)';
+                });
+                
+                dropArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    dropArea.style.backgroundColor = 'rgba(106, 17, 203, 0.05)';
+                    
+                    const files = e.dataTransfer.files;
+                    handleFiles(files);
+                });
+                
+                dropArea.addEventListener('click', function() {
+                    fileInput.click();
+                });
+            }
+            
+            // 处理文件选择
+            function handleFileSelect(e) {
+                const files = e.target.files;
+                handleFiles(files);
+            }
+            
+            // 处理文件
+            function handleFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // 检查文件类型
+                    if (!file.type.match('audio/mp3')) {
+                        alert('请只上传MP3文件');
+                        continue;
+                    }
+                    
+                    // 创建文件对象
+                    const fileObj = {
+                        name: file.name,
+                        size: formatFileSize(file.size),
+                        url: URL.createObjectURL(file),
+                        file: file
+                    };
+                    
+                    uploadedFiles.push(fileObj);
+                    addFileToList(fileObj, uploadedFiles.length - 1);
+                }
+                
+                // 如果这是第一个文件，自动播放
+                if (uploadedFiles.length === 1) {
+                    playFile(0);
+                }
+            }
+            
+            // 添加文件到列表
+            function addFileToList(file, index) {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.dataset.index = index;
+                
+                fileItem.innerHTML = `
+                    <i class="fas fa-music file-icon"></i>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${file.size}</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="file-action-btn play-btn"><i class="fas fa-play"></i></button>
+                        <button class="file-action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                fileList.appendChild(fileItem);
+                
+                // 添加播放事件
+                const playButton = fileItem.querySelector('.play-btn');
+                playButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    playFile(index);
+                });
+                
+                // 添加删除事件
+                const deleteButton = fileItem.querySelector('.delete-btn');
+                deleteButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    deleteFile(index);
+                });
+                
+                // 点击文件项也可以播放
+                fileItem.addEventListener('click', function() {
+                    playFile(index);
+                });
+            }
+            
+            // 播放文件
+            function playFile(index) {
+                if (index < 0 || index >= uploadedFiles.length) return;
+                
+                // 更新当前文件索引
+                currentFileIndex = index;
+                
+                // 更新UI
+                const fileItems = document.querySelectorAll('.file-item');
+                fileItems.forEach(item => item.classList.remove('active'));
+                fileItems[index].classList.add('active');
+                
+                // 设置音频源
+                audio.src = uploadedFiles[index].url;
+                audio.load();
+                
+                // 更新歌曲信息
+                currentSongTitle.textContent = uploadedFiles[index].name;
+                currentSongArtist.textContent = '上传用户';
+                
+                // 播放
+                playSong();
+            }
+            
+            // 删除文件
+            function deleteFile(index) {
+                if (index === currentFileIndex) {
+                    if (isPlaying) {
+                        pauseSong();
+                    }
+                    audio.src = '';
+                }
+                
+                // 从数组中移除
+                uploadedFiles.splice(index, 1);
+                
+                // 更新UI
+                const fileItems = document.querySelectorAll('.file-item');
+                fileList.removeChild(fileItems[index]);
+                
+                // 重新索引剩余的文件项
+                const remainingItems = document.querySelectorAll('.file-item');
+                for (let i = 0; i < remainingItems.length; i++) {
+                    remainingItems[i].dataset.index = i;
+                }
+                
+                // 如果删除了当前播放的文件，播放下一首或停止
+                if (index === currentFileIndex) {
+                    if (uploadedFiles.length > 0) {
+                        playFile(Math.min(index, uploadedFiles.length - 1));
+                    } else {
+                        currentFileIndex = -1;
+                        currentSongTitle.textContent = '选择一首歌曲';
+                        currentSongArtist.textContent = '上传MP3文件开始播放';
+                        progress.style.width = '0%';
+                        currentTimeEl.textContent = '0:00';
+                        durationEl.textContent = '0:00';
+                    }
+                } else if (index < currentFileIndex) {
+                    currentFileIndex--;
+                }
+            }
+            
+            // 播放歌曲
+            function playSong() {
+                audio.play();
+                isPlaying = true;
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            
+            // 暂停歌曲
+            function pauseSong() {
+                audio.pause();
+                isPlaying = false;
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+            
+            // 切换播放/暂停
+            function togglePlay() {
+                if (currentFileIndex === -1 && uploadedFiles.length > 0) {
+                    playFile(0);
+                    return;
+                }
+                
+                if (isPlaying) {
+                    pauseSong();
+                } else {
+                    playSong();
+                }
+            }
+            
+            // 播放上一首
+            function playPrev() {
+                if (uploadedFiles.length === 0) return;
+                
+                let newIndex = currentFileIndex - 1;
+                if (newIndex < 0) {
+                    newIndex = uploadedFiles.length - 1;
+                }
+                
+                playFile(newIndex);
+            }
+            
+            // 播放下一首
+            function playNext() {
+                if (uploadedFiles.length === 0) return;
+                
+                let newIndex = currentFileIndex + 1;
+                if (newIndex >= uploadedFiles.length) {
+                    newIndex = 0;
+                }
+                
+                playFile(newIndex);
+            }
+            
+            // 更新进度条
+            function updateProgress() {
+                const { duration, currentTime } = audio;
+                
+                // 更新进度条宽度
+                const progressPercent = (currentTime / duration) * 100;
+                progress.style.width = `${progressPercent}%`;
+                
+                // 更新显示的时间
+                const durationMinutes = Math.floor(duration / 60);
+                let durationSeconds = Math.floor(duration % 60);
+                if (durationSeconds < 10) {
+                    durationSeconds = `0${durationSeconds}`;
+                }
+                
+                const currentMinutes = Math.floor(currentTime / 60);
+                let currentSeconds = Math.floor(currentTime % 60);
+                if (currentSeconds < 10) {
+                    currentSeconds = `0${currentSeconds}`;
+                }
+                
+                // 避免在持续时间显示NaN
+                if (duration && !isNaN(duration)) {
+                    durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
+                    currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+                }
+            }
+            
+            // 设置进度
+            function setProgress(e) {
+                const width = this.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audio.duration;
+                
+                audio.currentTime = (clickX / width) * duration;
+            }
+            
+            // 设置音量
+            function setVolume() {
+                audio.volume = volumeSlider.value;
+            }
+            
+            // 格式化文件大小
+            function formatFileSize(bytes) {
+                if (bytes < 1024) {
+                    return bytes + ' bytes';
+                } else if (bytes < 1048576) {
+                    return (bytes / 1024).toFixed(1) + ' KB';
+                } else {
+                    return (bytes / 1048576).toFixed(1) + ' MB';
+                }
+            }
+            
+            // 初始化播放器
+            initPlayer();
+        });
+    </script>
+</body>
+</html>
