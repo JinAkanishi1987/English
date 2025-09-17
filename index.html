@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP3 文件夹音乐播放器</title>
+    <title>一年级英语上册</title>
     <style>
-        /* 全局样式 */
+        /* 样式保持不变 */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -101,9 +101,9 @@
 
     <script>
         // MP3 文件夹路径
-        const musicFolder = 'https://jinakanishi1987.github.io/English/music';
+        const musicFolder = 'https://jinakanishi1987.github.io/English/music/';
 
-        // 手动定义文件列表（如果文件过多，建议通过后端 API 动态获取）
+        // 手动定义文件列表
         const musicFiles = [
             '01%20Starter.mp3',
             '02%20Unit%201-Small%20task.mp3',
@@ -203,14 +203,17 @@
             // 显示文件名
             const title = document.createElement('p');
             title.classList.add('music-title');
-            title.textContent = `${index + 1}. ${file.split('/').pop()}`; // 显示文件名
+            title.textContent = `${index + 1}. ${file}`;
 
             // 播放按钮
             const playButton = document.createElement('button');
             playButton.classList.add('play-button');
             playButton.textContent = '播放';
             playButton.addEventListener('click', () => {
-                audioPlayer.src = musicFolder + file;
+                const encodedFile = encodeURIComponent(file); // 编码文件名
+                const fullPath = `${musicFolder}${encodedFile}`;
+                console.log('播放路径:', fullPath); // 调试路径
+                audioPlayer.src = fullPath;
                 audioPlayer.style.display = 'block';
                 audioPlayer.play();
             });
@@ -225,7 +228,3 @@
     </script>
 </body>
 </html>
-
-
-
-
